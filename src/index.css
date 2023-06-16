@@ -16,14 +16,13 @@
 }
 .header {
   padding: 16px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  text-align: center;
 }
 .logo {
   font-family: monospace;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 24px;
+  text-decoration: underline;
   color: var(--text-main);
 }
 .main {
@@ -65,14 +64,8 @@ button.primary:hover {
   padding: 1em;
   margin: 1em 0;
 }
-.datetime {
-  margin: 2em 0;
-}
-.datetime h5 {
+.details h5 {
   margin-top: 1em;
-}
-.datetime h5:first-child {
-  margin-top: 0;
 }
 .parts {
   display: flex;
@@ -101,6 +94,12 @@ button.primary:hover {
 .moreinfo {
   margin-top: 4em;
 }
-.datetime + .moreinfo {
+.details + .moreinfo {
   margin-top: 2em;
+}
+.relative-time {
+  margin-left: 1em;
+  font-size: 20px;
+  text-transform: capitalize;
+  font-style: italic;
 }
