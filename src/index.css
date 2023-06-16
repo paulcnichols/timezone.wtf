@@ -16,26 +16,15 @@
 }
 .header {
   padding: 16px 0;
-  font-family: monospace;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 .logo {
+  font-family: monospace;
   font-weight: 700;
   font-size: 20px;
   color: var(--text-main);
-}
-.timezone {
-  display: flex;
-  align-items: center;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-secondary);
-}
-.timezone label {
-  margin-right: 1em;
-  font-weight: 700;
 }
 .main {
   margin-top: 4em;
@@ -96,18 +85,18 @@ button.primary:hover {
 .parts b {
   display: block;
 }
-.remotetz {
+.timezone {
   display: flex;
-  margin-top: 1em;
   align-items: center;
   justify-content: space-between;
 }
-.remotetz h5 {
+.timezone h5 {
   margin: 0;
 }
-.remotetz select {
+.timezone select {
   font-size: 12px;
   font-weight: 700;
+  background-color: #fff;
 }
 .moreinfo {
   margin-top: 4em;

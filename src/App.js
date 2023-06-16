@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import dayjs from "dayjs";
 import __utc__ from "dayjs/plugin/utc";
 import __timezone__ from "dayjs/plugin/timezone";
@@ -77,29 +77,19 @@ function App() {
   const [remoteTimezone, setRemoteTimezone] = useState(
     Intl.DateTimeFormat().resolvedOptions().timeZone
   );
-  const [input, setInput] = useState(dayjs().format("MMMM DD, YYYY HH:mm:ss"));
+  const [input, setInput] = useState(
+    decodeURI(window.location.hash.replace(/^#/, "")) || ""
+  );
   const [error, setError] = useState("");
   const [datetime, setDatetime] = useState(null);
 
-  useEffect(() => {
-    try {
-      window.location.hash = input;
-      parse();
-    } catch (e) {}
-  }, []);
-
-  function onChange(e) {
-    window.location.hash = e.target.value;
+  function onChangeInput(e) {
     setInput(e.target.value);
     setError("");
   }
 
   function onChangeTimezone(e) {
-    setTimezone(e.target.value);
-    setError("");
-    if (input) {
-      parse();
-    }
+    setTimezone(e.target.value, parse);
   }
 
   function onEnter(e) {
@@ -116,15 +106,19 @@ function App() {
   function parse() {
     setError("");
     setDatetime(null);
-    if (!input) {
-      return;
+
+    let text = input.trim();
+    if (!text) {
+      text = dayjs().format("LLLL");
+      onChangeInput({ target: { value: text } });
     }
+    window.location.hash = text;
     try {
       let datetime = null;
-      if (input.match(/^\d+(\.\d+)?$/)) {
-        datetime = dayjs.unix(input);
+      if (text.match(/^\d+(\.\d+)?$/)) {
+        datetime = dayjs.unix(text);
       } else {
-        datetime = dayjs(input).tz(timezone, true);
+        datetime = dayjs(text).tz(timezone, true);
       }
       if (!datetime.isValid()) {
         return setError("Invalid date or time string.");
@@ -139,17 +133,9 @@ function App() {
   return (
     <div>
       <div className="header container">
-        <a className="logo" href="#">
+        <a className="logo" href=".">
           timezone.wtf
         </a>
-        <div className="timezone">
-          <label htmlFor="localtz">Local TZ</label>
-          <TimezoneSelect
-            id="localtz"
-            value={timezone}
-            onChange={onChangeTimezone}
-          />
-        </div>
       </div>
       <div className="container">
         <div className="main">
@@ -161,7 +147,7 @@ function App() {
               autoFocus={true}
               placeholder="Enter a date or time string..."
               value={input}
-              onChange={onChange}
+              onChange={onChangeInput}
               onKeyDown={onEnter}
             />
             <button type="submit" className="primary">
@@ -174,13 +160,17 @@ function App() {
           <div className="datetime">
             <h3>More about this Date Time</h3>
             <div className="details">
-              <h5>In Local Time</h5>
-              <DateParts datetime={datetime} />
+              <div className="timezone">
+                <h5>In Local Timezone</h5>
+                <TimezoneSelect
+                  id="localtz"
+                  value={timezone}
+                  onChange={onChangeTimezone}
+                />
+              </div>
+              <div>{datetime.format("LLLL")}</div>
 
-              <h5>In UTC</h5>
-              <DateParts datetime={datetime.utc()} />
-
-              <div className="remotetz">
+              <div className="timezone" style={{ marginTop: "1em" }}>
                 <h5>In Remote Timezone</h5>
                 <TimezoneSelect
                   id="remotetz"
@@ -198,6 +188,9 @@ function App() {
 
               <h5>In UNIX Format</h5>
               <div>{datetime.unix()}</div>
+
+              <h5>Parsed in Local Time</h5>
+              <DateParts datetime={datetime} />
             </div>
           </div>
         )}
