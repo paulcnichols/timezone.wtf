@@ -106,12 +106,12 @@ function App() {
       </div>
       <div className="main">
         <h1>Date & Time Explorer</h1>
-        <p>Enter a date or time string...</p>
+        <p>Enter a date and time string...</p>
         <form className="input-group" onSubmit={submit}>
           <input
             type="text"
             autoFocus={true}
-            placeholder="Enter a date or time string..."
+            placeholder="Enter a date and time string..."
             value={input}
             onChange={onChangeInput}
             onKeyDown={onEnter}
@@ -147,11 +147,13 @@ function App() {
           </div>
           <div>
             {remoteDatetime.format("LLLL")}
-            <span className="relative-time">
-              {`(${Math.abs(remoteDiff)} hours ${
-                remoteDiff > 0 ? "ahead" : "behind"
-              })`}
-            </span>
+            {remoteDiff != 0 && (
+              <span className="relative-time">
+                {`(${Math.abs(remoteDiff)} hours ${
+                  remoteDiff > 0 ? "ahead" : "behind"
+                })`}
+              </span>
+            )}
           </div>
 
           <h5>In ISO 8601 Format</h5>
@@ -164,6 +166,10 @@ function App() {
           <div>{datetime.unix()}</div>
 
           <h5>Parsed in Local Time</h5>
+          <select>
+            <option value="local">Local Time</option>
+            <option value="utc">UTC</option>
+          </select>
           <div className="parts">
             <div>
               <h6>Year</h6>
