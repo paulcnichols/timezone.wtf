@@ -13,7 +13,7 @@ dayjs.extend(__relativeTime__);
 function TimezoneSelect({ id, value, onChange }) {
   const timezones = Intl.supportedValuesOf("timeZone").map((tz) => [
     tz,
-    tz.split("/")[1].replace(/_/g, " "),
+    tz.split("/")[1] ? tz.split("/")[1].replace(/_/g, " ") : tz.split("/")[0],
   ]);
   timezones.sort((a, b) => a[1].localeCompare(b[1]));
   return (
@@ -101,7 +101,7 @@ function App() {
     <div className="container">
       <div className="header">
         <a className="logo" href=".">
-          timezone.wtf
+          ⏱️ timezone.wtf
         </a>
       </div>
       <div className="main">
@@ -166,10 +166,6 @@ function App() {
           <div>{datetime.unix()}</div>
 
           <h5>Parsed in Local Time</h5>
-          <select>
-            <option value="local">Local Time</option>
-            <option value="utc">UTC</option>
-          </select>
           <div className="parts">
             <div>
               <h6>Year</h6>
